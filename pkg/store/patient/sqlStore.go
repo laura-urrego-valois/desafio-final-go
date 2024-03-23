@@ -51,7 +51,7 @@ func (s *sqlStore) Update(patient domain.Patient) error {
 	if err != nil {
 		return err
 	}
-	res, err := stmt.Exec(patient.FirstName, patient.LastName, patient.Address, patient.DNI, patient.ReleaseDate)
+	res, err := stmt.Exec(patient.FirstName, patient.LastName, patient.Address, patient.DNI, patient.ReleaseDate, patient.Id)
 	if err != nil {
 		return err
 	}
