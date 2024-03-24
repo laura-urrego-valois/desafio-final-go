@@ -1,6 +1,6 @@
 package store
 
-import "proyecto-final-go/internal/domain"
+import "proyecto_final_go/internal/domain"
 
 type DentistStoreInterface interface {
 	Read(id int) (domain.Dentist, error)

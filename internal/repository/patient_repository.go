@@ -27,15 +27,6 @@ func NewPRepository(storage store.PatientStoreInterface) PRepository {
 
 //------------------------------------
 
-func (r *PatientRepository) GetByID(id int) (domain.Patient, error) {
-	patient, err := r.storage.Read(id)
-	if err != nil {
-		return domain.Patient{}, errors.New("patient not found")
-	}
-	return patient, nil
-
-}
-
 func (r *PatientRepository) Create(p domain.Patient) error {
 	if !r.storage.Exists(p.DNI) {
 		return errors.New("DNI already exists")
@@ -47,23 +38,13 @@ func (r *PatientRepository) Create(p domain.Patient) error {
 	return nil
 }
 
-func (r *PatientRepository) Delete(id int) error {
-	err := r.storage.Delete(id)
+func (r *PatientRepository) GetByID(id int) (domain.Patient, error) {
+	patient, err := r.storage.Read(id)
 	if err != nil {
-		return err
+		return domain.Patient{}, errors.New("Patient not found")
 	}
-	return nil
-}
+	return patient, nil
 
-func (r *PatientRepository) Update(p domain.Patient) error {
-	if !r.storage.Exists(p.DNI) {
-		return errors.New("DNI already exists")
-	}
-	err := r.storage.Update(p)
-	if err != nil {
-		return errors.New("error updating product")
-	}
-	return nil
 }
 
 func (r *PatientRepository) GetAll() ([]domain.Patient, error) {
@@ -74,13 +55,32 @@ func (r *PatientRepository) GetAll() ([]domain.Patient, error) {
 	return patients, nil
 }
 
+func (r *PatientRepository) Update(p domain.Patient) error {
+	if !r.storage.Exists(p.DNI) {
+		return errors.New("DNI already exists")
+	}
+	err := r.storage.Update(p)
+	if err != nil {
+		return errors.New("Error updating patient")
+	}
+	return nil
+}
+
 func (r *PatientRepository) PatchAddress(id int, address string) error {
 	patient, err := r.storage.Read(id)
 	if err != nil {
-		return errors.New("patient not found")
+		return errors.New("Patient not found")
 	}
 	patient.Address = address
 	err = r.storage.PatchAddress(patient.Id, patient.Address)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *PatientRepository) Delete(id int) error {
+	err := r.storage.Delete(id)
 	if err != nil {
 		return err
 	}

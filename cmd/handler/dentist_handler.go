@@ -44,13 +44,13 @@ func (h *dentistHandler) Post() gin.HandlerFunc {
 			return
 		}
 
-		createdDentist, err := h.s.Create(&dentist)
+		err := h.s.Create(dentist)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create dentist"})
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
-		ctx.JSON(http.StatusCreated, createdDentist)
+		ctx.JSON(http.StatusCreated, dentist)
 	}
 }
 
@@ -106,21 +106,24 @@ func (h *dentistHandler) Put() gin.HandlerFunc {
 			return
 		}
 
-		err = h.s.Update(&dentist)
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		if dentist.Id == 0 {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "dentist ID is required"})
 			return
 		}
 
-		ctx.JSON(http.StatusCreated, dentist)
+		err = h.s.Update(dentist)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		ctx.JSON(http.StatusOK, dentist)
 	}
 }
 
 func (h *dentistHandler) Patch() gin.HandlerFunc {
 	type Request struct {
-		FirstName string `json:"first_name,omitempty"`
-		LastName  string `json:"last_name,omitempty"`
-		License   string `json:"license,omitempty"`
+		License string `json:"license,omitempty"`
 	}
 
 	return func(ctx *gin.Context) {
@@ -146,10 +149,10 @@ func (h *dentistHandler) Patch() gin.HandlerFunc {
 			return
 		}
 
-		update := domain.Dentist{
-			FirstName: r.FirstName,
-			LastName:  r.LastName,
-			License:   r.License,
+		err = h.s.PatchLicense(id, r.License)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 
 		dentist, err := h.s.GetByID(id)
@@ -158,27 +161,7 @@ func (h *dentistHandler) Patch() gin.HandlerFunc {
 			return
 		}
 
-		if update.FirstName == "" && update.LastName == "" && update.License == "" {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "no fields to update"})
-			return
-		}
-
-		if update.FirstName != "" {
-			dentist.FirstName = update.FirstName
-		}
-		if update.LastName != "" {
-			dentist.LastName = update.LastName
-		}
-		if update.License != "" {
-			dentist.License = update.License
-		}
-
-		if err := h.s.Update(dentist); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		ctx.JSON(http.StatusCreated, dentist)
+		ctx.JSON(http.StatusOK, dentist)
 	}
 }
 

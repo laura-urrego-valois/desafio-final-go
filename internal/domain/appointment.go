@@ -1,7 +1,7 @@
 package domain
 
 type Appointment struct {
-	ID          int     `json:"id"`
+	Id          int     `json:"id"`
 	Patient     Patient `json:"patient" binding:"required"`
 	Dentist     Dentist `json:"dentist" binding:"required"`
 	Date        string  `json:"date" binding:"required"`
