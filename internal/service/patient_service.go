@@ -46,9 +46,6 @@ func (s *PatientService) Update(pa domain.Patient) error {
 	if err != nil {
 		return err
 	}
-	if pa.Id > 0 {
-		p.Id = pa.Id
-	}
 	if pa.FirstName != "" {
 		p.FirstName = pa.FirstName
 	}

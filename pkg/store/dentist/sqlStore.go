@@ -2,7 +2,7 @@ package store
 
 import (
 	"database/sql"
-	"proyecto-final-go/internal/domain"
+	"proyecto_final_go/internal/domain"
 )
 
 type sqlStore struct {

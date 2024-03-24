@@ -6,14 +6,15 @@ import (
 )
 
 type DentistService interface {
-	Create(dentist *domain.Dentist) (*domain.Dentist, error)
-	GetByID(id int) (*domain.Dentist, error)
-	GetAll() ([]*domain.Dentist, error)
-	Update(dentist *domain.Dentist) error
-	UpdateFields(id int, updates map[string]interface{}) error
+	Create(dentist domain.Dentist) error
+	GetByID(id int) (domain.Dentist, error)
+	GetAll() ([]domain.Dentist, error)
+	Update(dentist domain.Dentist) error
+	PatchLicense(id int, license string) error
 	Delete(id int) error
 }
 
+// -------------------------------------------
 type dentistService struct {
 	dentistRepo repository.DentistRepository
 }
@@ -22,23 +23,24 @@ func NewDentistService(dentistRepo repository.DentistRepository) DentistService 
 	return &dentistService{dentistRepo}
 }
 
-func (s *dentistService) Create(dentist *domain.Dentist) (*domain.Dentist, error) {
-	dentist, err := s.dentistRepo.Create(dentist)
+// -------------------------------------------
+func (s *dentistService) Create(dentist domain.Dentist) error {
+	err := s.dentistRepo.Create(dentist)
 	if err != nil {
-		return &domain.Dentist{}, err
+		return err
 	}
-	return dentist, nil
+	return nil
 }
 
-func (s *dentistService) GetByID(id int) (*domain.Dentist, error) {
+func (s *dentistService) GetByID(id int) (domain.Dentist, error) {
 	dentist, err := s.dentistRepo.GetByID(id)
 	if err != nil {
-		return &domain.Dentist{}, err
+		return domain.Dentist{}, err
 	}
 	return dentist, nil
 }
 
-func (s *dentistService) GetAll() ([]*domain.Dentist, error) {
+func (s *dentistService) GetAll() ([]domain.Dentist, error) {
 	dentists, err := s.dentistRepo.GetAll()
 	if err != nil {
 		return nil, err
@@ -46,8 +48,8 @@ func (s *dentistService) GetAll() ([]*domain.Dentist, error) {
 	return dentists, nil
 }
 
-func (s *dentistService) Update(dentist *domain.Dentist) error {
-	existingDentist, err := s.dentistRepo.GetByID(dentist.ID)
+func (s *dentistService) Update(dentist domain.Dentist) error {
+	existingDentist, err := s.dentistRepo.GetByID(dentist.Id)
 	if err != nil {
 		return err
 	}
@@ -69,28 +71,8 @@ func (s *dentistService) Update(dentist *domain.Dentist) error {
 	return nil
 }
 
-func (s *dentistService) UpdateFields(id int, updates map[string]interface{}) error {
-	existingDentist, err := s.dentistRepo.GetByID(id)
-	if err != nil {
-		return err
-	}
-	for key, value := range updates {
-		switch key {
-		case "first_name":
-			if firstName, ok := value.(string); ok {
-				existingDentist.FirstName = firstName
-			}
-		case "last_name":
-			if lastName, ok := value.(string); ok {
-				existingDentist.LastName = lastName
-			}
-		case "license":
-			if license, ok := value.(string); ok {
-				existingDentist.License = license
-			}
-		}
-	}
-	err = s.dentistRepo.Update(existingDentist)
+func (s *dentistService) PatchLicense(id int, license string) error {
+	err := s.dentistRepo.PatchLicense(id, license)
 	if err != nil {
 		return err
 	}
