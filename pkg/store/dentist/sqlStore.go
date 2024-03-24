@@ -19,7 +19,7 @@ func NewSqlStore(db *sql.DB) DentistStoreInterface {
 
 func (s *sqlStore) Read(id int) (domain.Dentist, error) {
 	var dentist domain.Dentist
-	query := "SELECT * FROM dentists WHERE id = ?;"
+	query := "SELECT * FROM dentists WHERE Id = ?;"
 	row := s.db.QueryRow(query, id)
 	err := row.Scan(&dentist.Id, &dentist.FirstName, &dentist.LastName, &dentist.License)
 	if err != nil {
@@ -46,7 +46,7 @@ func (s *sqlStore) Create(dentist domain.Dentist) error {
 }
 
 func (s *sqlStore) Update(dentist domain.Dentist) error {
-	query := "UPDATE dentists SET FirstName = ?, LastName = ?, License = ? WHERE id = ?;"
+	query := "UPDATE dentists SET FirstName = ?, LastName = ?, License = ? WHERE Id = ?;"
 	stmt, err := s.db.Prepare(query)
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func (s *sqlStore) Update(dentist domain.Dentist) error {
 }
 
 func (s *sqlStore) Delete(id int) error {
-	query := "DELETE FROM dentists WHERE id = ?;"
+	query := "DELETE FROM dentists WHERE Id = ?;"
 	stmt, err := s.db.Prepare(query)
 	if err != nil {
 		return err
@@ -82,7 +82,7 @@ func (s *sqlStore) Delete(id int) error {
 func (s *sqlStore) Exists(license string) bool {
 	var exists bool
 	var id int
-	query := "SELECT id FROM dentists WHERE License = ?;"
+	query := "SELECT Id FROM dentists WHERE License = ?;"
 	row := s.db.QueryRow(query, license)
 	err := row.Scan(&id)
 	if err != nil {
@@ -95,7 +95,7 @@ func (s *sqlStore) Exists(license string) bool {
 }
 
 func (s *sqlStore) PatchLicense(id int, license string) error {
-	query := "UPDATE dentists SET License = ? WHERE id = ?;"
+	query := "UPDATE dentists SET License = ? WHERE Id = ?;"
 	stmt, err := s.db.Prepare(query)
 	if err != nil {
 		return err

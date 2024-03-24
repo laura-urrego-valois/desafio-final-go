@@ -108,7 +108,7 @@ func (s *sqlAppointmentStore) Create(appointment domain.Appointment) error {
 	return nil
 }
 
-func (s *sqlAppointmentStore) CreateByPatientDNIAndDentistLicense(patientDNI string, license string) ([]domain.Appointment, error) {
+func (s *sqlAppointmentStore) CreateByPatientDNIAndDentistLicense(patientDNI string, license string, date string, hour string, description string) ([]domain.Appointment, error) {
 	var appointments []domain.Appointment
 
 	var patientID int
@@ -131,8 +131,8 @@ func (s *sqlAppointmentStore) CreateByPatientDNIAndDentistLicense(patientDNI str
 		return nil, err
 	}
 
-	createQuery := "INSERT INTO appointments (patient_id, dentist_id) VALUES (?, ?)"
-	_, err = s.db.Exec(createQuery, patientID, dentistID)
+	createQuery := "INSERT INTO appointments (patient_id, dentist_id, date, hour, description) VALUES (?, ?, ?, ?, ?)"
+	_, err = s.db.Exec(createQuery, patientID, dentistID, date, hour, description)
 	if err != nil {
 		return nil, err
 	}

@@ -8,7 +8,7 @@ import (
 
 type AppointmentRepository interface {
 	Create(appointment domain.Appointment) error
-	//CreateByPatientDNIAndDentistLicense(patientDNI string, license string) ([]domain.Appointment, error)
+	CreateByPatientDNIAndDentistLicense(patientDNI string, license string, date string, hour string, description string) ([]domain.Appointment, error)
 	GetByID(id int) (domain.Appointment, error)
 	GetByPatientDNI(patientDNI string) ([]domain.Appointment, error)
 	GetAll() ([]domain.Appointment, error)
@@ -47,10 +47,14 @@ func (r *appointmentRepository) Create(appointment domain.Appointment) error {
 	return nil
 }
 
-//func (r *appointmentRepository) CreateByPatientDNIAndDentistLicense(patientDNI string, license string) ([]domain.Appointment, error) {
-//return
-// TODO: falta desarrollar lógica
-//}
+func (r *appointmentRepository) CreateByPatientDNIAndDentistLicense(patientDNI string, license string, date string, hour string, description string) ([]domain.Appointment, error) {
+	appointments, err := r.storage.CreateByPatientDNIAndDentistLicense(patientDNI, license, date, hour, description)
+	if err != nil {
+		return nil, err
+	}
+	return appointments, nil
+
+}
 
 func (r *appointmentRepository) GetByID(id int) (domain.Appointment, error) {
 	appointment, err := r.storage.Read(id)

@@ -8,7 +8,7 @@ import (
 
 type AppointmentService interface {
 	Create(appointment domain.Appointment) error
-	//TODO CreateByPatientDNIAndDentistLicense(patientDNI string, license string) ([]domain.Appointment, error)
+	CreateByPatientDNIAndDentistLicense(patientDNI string, license string, date string, hour string, description string) ([]domain.Appointment, error)
 	GetByID(id int) (domain.Appointment, error)
 	GetByPatientDNI(patientDNI string) ([]domain.Appointment, error)
 	GetAll() ([]domain.Appointment, error)
@@ -41,6 +41,14 @@ func (s *appointmentService) Create(appointment domain.Appointment) error {
 		}
 	}
 	return s.appointmentRepo.Create(appointment)
+}
+
+func (s *appointmentService) CreateByPatientDNIAndDentistLicense(patientDNI string, license string, date string, hour string, description string) ([]domain.Appointment, error) {
+	appointments, err := s.appointmentRepo.CreateByPatientDNIAndDentistLicense(patientDNI, license, date, hour, description)
+	if err != nil {
+		return nil, err
+	}
+	return appointments, nil
 }
 
 func (s *appointmentService) GetByID(id int) (domain.Appointment, error) {
