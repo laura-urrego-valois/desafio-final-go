@@ -7,7 +7,7 @@ import (
 )
 
 // ----------------------------------
-type PRepository interface {
+type PatientRepository interface {
 	Create(patient domain.Patient) error
 	GetByID(id int) (domain.Patient, error)
 	GetAll() ([]domain.Patient, error)
@@ -17,17 +17,17 @@ type PRepository interface {
 }
 
 // ----------------------------------
-type PatientRepository struct {
+type patientRepository struct {
 	storage store.PatientStoreInterface
 }
 
-func NewPRepository(storage store.PatientStoreInterface) PRepository {
-	return &PatientRepository{storage}
+func NewPatientRepository(storage store.PatientStoreInterface) PatientRepository {
+	return &patientRepository{storage}
 }
 
 //------------------------------------
 
-func (r *PatientRepository) Create(p domain.Patient) error {
+func (r *patientRepository) Create(p domain.Patient) error {
 	if !r.storage.Exists(p.DNI) {
 		return errors.New("DNI already exists")
 	}
@@ -38,7 +38,7 @@ func (r *PatientRepository) Create(p domain.Patient) error {
 	return nil
 }
 
-func (r *PatientRepository) GetByID(id int) (domain.Patient, error) {
+func (r *patientRepository) GetByID(id int) (domain.Patient, error) {
 	patient, err := r.storage.Read(id)
 	if err != nil {
 		return domain.Patient{}, errors.New("Patient not found")
@@ -47,7 +47,7 @@ func (r *PatientRepository) GetByID(id int) (domain.Patient, error) {
 
 }
 
-func (r *PatientRepository) GetAll() ([]domain.Patient, error) {
+func (r *patientRepository) GetAll() ([]domain.Patient, error) {
 	patients, err := r.storage.GetAll()
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (r *PatientRepository) GetAll() ([]domain.Patient, error) {
 	return patients, nil
 }
 
-func (r *PatientRepository) Update(p domain.Patient) error {
+func (r *patientRepository) Update(p domain.Patient) error {
 	if !r.storage.Exists(p.DNI) {
 		return errors.New("DNI already exists")
 	}
@@ -66,7 +66,7 @@ func (r *PatientRepository) Update(p domain.Patient) error {
 	return nil
 }
 
-func (r *PatientRepository) PatchAddress(id int, address string) error {
+func (r *patientRepository) PatchAddress(id int, address string) error {
 	patient, err := r.storage.Read(id)
 	if err != nil {
 		return errors.New("Patient not found")
@@ -79,7 +79,7 @@ func (r *PatientRepository) PatchAddress(id int, address string) error {
 	return nil
 }
 
-func (r *PatientRepository) Delete(id int) error {
+func (r *patientRepository) Delete(id int) error {
 	err := r.storage.Delete(id)
 	if err != nil {
 		return err

@@ -11,19 +11,19 @@ import (
 )
 
 // -------------------------------------
-type PatientHandler struct {
+type patientHandler struct {
 	s service.PatientService
 }
 
-func NewPatientHandler(s service.PatientService) *PatientHandler {
-	return &PatientHandler{
+func NewPatientHandler(s service.PatientService) *patientHandler {
+	return &patientHandler{
 		s: s,
 	}
 }
 
 //--------------------------------------
 
-func (h *PatientHandler) Post() gin.HandlerFunc {
+func (h *patientHandler) Post() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("TOKEN")
 		if token == "" {
@@ -55,7 +55,7 @@ func (h *PatientHandler) Post() gin.HandlerFunc {
 	}
 }
 
-func (h *PatientHandler) GetByID() gin.HandlerFunc {
+func (h *patientHandler) GetByID() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("TOKEN")
 		if token == "" {
@@ -84,7 +84,7 @@ func (h *PatientHandler) GetByID() gin.HandlerFunc {
 	}
 }
 
-func (h *PatientHandler) GetAll() gin.HandlerFunc {
+func (h *patientHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		patients, err := h.s.GetAll()
@@ -97,7 +97,7 @@ func (h *PatientHandler) GetAll() gin.HandlerFunc {
 	}
 }
 
-func (h *PatientHandler) Put() gin.HandlerFunc {
+func (h *patientHandler) Put() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		token := ctx.GetHeader("TOKEN")
@@ -127,7 +127,7 @@ func (h *PatientHandler) Put() gin.HandlerFunc {
 	}
 }
 
-func (h *PatientHandler) Patch() gin.HandlerFunc {
+func (h *patientHandler) Patch() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idParam := c.Param("id")
 		id, err := strconv.Atoi(idParam)
@@ -155,7 +155,7 @@ func (h *PatientHandler) Patch() gin.HandlerFunc {
 	}
 }
 
-func (h *PatientHandler) Delete() gin.HandlerFunc {
+func (h *patientHandler) Delete() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		token := ctx.GetHeader("TOKEN")

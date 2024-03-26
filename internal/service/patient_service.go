@@ -5,7 +5,7 @@ import (
 	"proyecto_final_go/internal/repository"
 )
 
-type PService interface {
+type PatientService interface {
 	Create(patient domain.Patient) error
 	GetByID(id int) (domain.Patient, error)
 	GetAll() ([]domain.Patient, error)
@@ -15,17 +15,17 @@ type PService interface {
 }
 
 // -------------------------------------------
-type PatientService struct {
+type patientService struct {
 	r repository.PatientRepository
 }
 
-func NewPService(r repository.PatientRepository) PService {
-	return &PatientService{r}
+func NewPatientService(r repository.PatientRepository) PatientService {
+	return &patientService{r}
 }
 
 //-------------------------------------------
 
-func (s *PatientService) GetByID(id int) (domain.Patient, error) {
+func (s *patientService) GetByID(id int) (domain.Patient, error) {
 	p, err := s.r.GetByID(id)
 	if err != nil {
 		return domain.Patient{}, err
@@ -33,7 +33,7 @@ func (s *PatientService) GetByID(id int) (domain.Patient, error) {
 	return p, nil
 }
 
-func (s *PatientService) Create(p domain.Patient) error {
+func (s *patientService) Create(p domain.Patient) error {
 	err := s.r.Create(p)
 	if err != nil {
 		return err
@@ -41,7 +41,7 @@ func (s *PatientService) Create(p domain.Patient) error {
 	return nil
 }
 
-func (s *PatientService) Update(pa domain.Patient) error {
+func (s *patientService) Update(pa domain.Patient) error {
 	p, err := s.r.GetByID(pa.Id)
 	if err != nil {
 		return err
@@ -68,7 +68,7 @@ func (s *PatientService) Update(pa domain.Patient) error {
 	return nil
 }
 
-func (s *PatientService) Delete(id int) error {
+func (s *patientService) Delete(id int) error {
 	err := s.r.Delete(id)
 	if err != nil {
 		return err
@@ -76,7 +76,7 @@ func (s *PatientService) Delete(id int) error {
 	return nil
 }
 
-func (s *PatientService) GetAll() ([]domain.Patient, error) {
+func (s *patientService) GetAll() ([]domain.Patient, error) {
 	patients, err := s.r.GetAll()
 	if err != nil {
 		return nil, err
@@ -84,7 +84,7 @@ func (s *PatientService) GetAll() ([]domain.Patient, error) {
 	return patients, nil
 }
 
-func (s *PatientService) PatchAddress(id int, address string) error {
+func (s *patientService) PatchAddress(id int, address string) error {
 	err := s.r.PatchAddress(id, address)
 	if err != nil {
 		return err

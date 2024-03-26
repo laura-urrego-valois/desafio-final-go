@@ -1,0 +1,220 @@
+definitions:
+  domain.Dentist:
+    properties:
+      FirstName:
+        type: string
+      Id:
+        type: integer
+      LastName:
+        type: string
+      License:
+        type: string
+    required:
+    - FirstName
+    - LastName
+    - License
+    type: object
+info:
+  contact: {}
+paths:
+  /dentists:
+    get:
+      consumes:
+      - application/json
+      description: Get all dentists from the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of dentists
+          schema:
+            type: slice
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get all dentists
+      tags:
+      - dentists
+    post:
+      consumes:
+      - application/json
+      description: Create a new dentist in the system
+      parameters:
+      - description: Authorization token
+        in: header
+        name: TOKEN
+        required: true
+        type: string
+      - description: Data of the dentist to create
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Dentist'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Dentist created successfully
+          schema:
+            $ref: '#/definitions/domain.Dentist'
+        "400":
+          description: Invalid dentist data or missing required fields
+          schema:
+            type: string
+        "401":
+          description: Token not found or invalid token
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Create a new dentist
+      tags:
+      - dentists
+    put:
+      consumes:
+      - application/json
+      description: Update an existing dentist in the system
+      parameters:
+      - description: Authorization token
+        in: header
+        name: TOKEN
+        required: true
+        type: string
+      - description: Updated data of the dentist
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Dentist'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Dentist updated successfully
+          schema:
+            $ref: '#/definitions/domain.Dentist'
+        "400":
+          description: Invalid dentist data or missing dentist ID
+          schema:
+            type: string
+        "401":
+          description: Token not found or invalid token
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Update existing dentist
+      tags:
+      - dentists
+  /dentists/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a dentist from the system
+      parameters:
+      - description: Authorization token
+        in: header
+        name: TOKEN
+        required: true
+        type: string
+      - description: Dentist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Dentist deleted successfully
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "401":
+          description: Token not found or invalid token
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Delete dentist
+      tags:
+      - dentists
+    get:
+      consumes:
+      - application/json
+      description: Get a dentist from the system by its ID
+      parameters:
+      - description: Dentist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Dentist found successfully
+          schema:
+            $ref: '#/definitions/domain.Dentist'
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Dentist not found
+          schema:
+            type: string
+      summary: Get dentist by ID
+      tags:
+      - dentists
+    patch:
+      consumes:
+      - application/json
+      description: Update the license of a dentist in the system
+      parameters:
+      - description: Authorization token
+        in: header
+        name: TOKEN
+        required: true
+        type: string
+      - description: Dentist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Dentist updated successfully
+          schema:
+            $ref: '#/definitions/domain.Dentist'
+        "400":
+          description: Invalid ID, invalid JSON or missing license data
+          schema:
+            type: string
+        "401":
+          description: Token not found or invalid token
+          schema:
+            type: string
+        "404":
+          description: Dentist not found
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Update dentist license
+      tags:
+      - dentists
+swagger: "2.0"
