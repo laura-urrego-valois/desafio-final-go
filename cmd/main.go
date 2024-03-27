@@ -31,7 +31,7 @@ func main() {
 	if err := godotenv.Load(".env"); err != nil {
 		panic("Error loading .env file: " + err.Error())
 	}
-	db, err := sql.Open("mysql", "root:0714018@tcp(localhost:3306)/turnos-odontologia")
+	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/turnos-odontologia")
 	if err != nil {
 		panic(err.Error())
 	}
