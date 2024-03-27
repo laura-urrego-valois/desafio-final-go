@@ -28,9 +28,9 @@ func (s *sqlAppointmentStore) Read(id int) (domain.Appointment, error) {
 		FROM 
 			appointments AS a
 		INNER JOIN 
-			patients AS p ON a.patient_id = p.Id
+			patients AS p ON a.patients_Id = p.Id
 		INNER JOIN 
-			dentists AS d ON a.dentist_id = d.Id
+			dentists AS d ON a.dentists_Id = d.Id
 		WHERE 
 			a.Id = ?;
 	`
@@ -56,9 +56,9 @@ func (s *sqlAppointmentStore) ReadByPatientDNI(patientDNI string) ([]domain.Appo
 	FROM 
 		appointments AS a
 	INNER JOIN 
-		patients AS p ON a.patient_id = p.Id
+		patients AS p ON a.patients_Id = p.Id
 	INNER JOIN 
-		dentists AS d ON a.dentist_id = d.Id
+		dentists AS d ON a.dentists_Id = d.Id
 	WHERE 
 		p.DNI = ?;
 	`
@@ -90,7 +90,7 @@ func (s *sqlAppointmentStore) ReadByPatientDNI(patientDNI string) ([]domain.Appo
 
 func (s *sqlAppointmentStore) Create(appointment domain.Appointment) error {
 	query := `
-		INSERT INTO appointments (Date, Hour, Description, patient_id, dentist_id) 
+		INSERT INTO appointments (Date, Hour, Description, patients_Id, dentists_Id) 
 		VALUES (?, ?, ?, ?, ?);
 	`
 	stmt, err := s.db.Prepare(query)
@@ -131,7 +131,7 @@ func (s *sqlAppointmentStore) CreateByPatientDNIAndDentistLicense(patientDNI str
 		return nil, err
 	}
 
-	createQuery := "INSERT INTO appointments (patient_id, dentist_id, Date, Hour, Description) VALUES (?, ?, ?, ?, ?)"
+	createQuery := "INSERT INTO appointments (patients_Id, dentists_Id, Date, Hour, Description) VALUES (?, ?, ?, ?, ?)"
 	_, err = s.db.Exec(createQuery, patientID, dentistID, date, hour, description)
 	if err != nil {
 		return nil, err
@@ -145,11 +145,11 @@ func (s *sqlAppointmentStore) CreateByPatientDNIAndDentistLicense(patientDNI str
 		FROM 
 			appointments AS a
 		INNER JOIN 
-			patients AS p ON a.patient_id = p.Id
+			patients AS p ON a.patients_Id = p.Id
 		INNER JOIN 
-			dentists AS d ON a.dentist_id = d.Id
+			dentists AS d ON a.dentists_Id = d.Id
 		WHERE 
-			a.patient_id = ? AND a.dentist_id = ?
+			a.patients_Id = ? AND a.dentists_Id = ?
 	`
 	rows, err := s.db.Query(appointmentsQuery, patientID, dentistID)
 	if err != nil {
@@ -176,8 +176,8 @@ func (s *sqlAppointmentStore) CreateByPatientDNIAndDentistLicense(patientDNI str
 func (s *sqlAppointmentStore) Update(appointment domain.Appointment) error {
 	query := `
 		UPDATE appointments 
-		SET Date = ?, Hour = ?, Description = ?, patient_id = ?, dentist_id = ?
-		WHERE id = ?;
+		SET Date = ?, Hour = ?, Description = ?, patients_Id = ?, dentists_Id = ?
+		WHERE Id = ?;
 	`
 	stmt, err := s.db.Prepare(query)
 	if err != nil {
@@ -231,9 +231,9 @@ func (s *sqlAppointmentStore) GetAll() ([]domain.Appointment, error) {
 	FROM 
 		appointments AS a
 	INNER JOIN 
-		patients AS p ON a.patient_id = p.Id
+		patients AS p ON a.patients_Id = p.Id
 	INNER JOIN 
-		dentists AS d ON a.dentist_id = d.Id
+		dentists AS d ON a.dentists_Id = d.Id
 	`
 
 	rows, err := s.db.Query(query)

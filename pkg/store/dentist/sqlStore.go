@@ -2,6 +2,7 @@ package store
 
 import (
 	"database/sql"
+	"errors"
 	"proyecto_final_go/internal/domain"
 )
 
@@ -79,19 +80,18 @@ func (s *sqlStore) Delete(id int) error {
 	return nil
 }
 
-func (s *sqlStore) Exists(license string) bool {
-	var exists bool
+func (s *sqlStore) Exists(license string) (bool, error) {
 	var id int
 	query := "SELECT Id FROM dentists WHERE License = ?;"
 	row := s.db.QueryRow(query, license)
 	err := row.Scan(&id)
 	if err != nil {
-		return false
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, nil
+		}
+		return false, err
 	}
-	if id > 0 {
-		exists = true
-	}
-	return exists
+	return id > 0, nil
 }
 
 func (s *sqlStore) PatchLicense(id int, license string) error {

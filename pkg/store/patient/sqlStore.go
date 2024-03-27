@@ -19,7 +19,7 @@ func NewSqlStore(db *sql.DB) PatientStoreInterface {
 
 func (s *sqlStore) Read(id int) (domain.Patient, error) {
 	var patient domain.Patient
-	query := "SELECT * FROM patients WHERE id = ?;"
+	query := "SELECT * FROM patients WHERE Id = ?;"
 	row := s.db.QueryRow(query, id)
 	err := row.Scan(&patient.Id, &patient.FirstName, &patient.LastName, &patient.Address, &patient.DNI, &patient.ReleaseDate)
 	if err != nil {
@@ -29,7 +29,7 @@ func (s *sqlStore) Read(id int) (domain.Patient, error) {
 }
 
 func (s *sqlStore) Create(patient domain.Patient) error {
-	query := "INSERT INTO patients (FirstName, LastName, Address,DNI,ReleaseDate) VALUES (?, ?, ?, ?, ?);"
+	query := "INSERT INTO patients (FirstName, LastName, Address, DNI, ReleaseDate) VALUES (?, ?, ?, ?, ?);"
 	stmt, err := s.db.Prepare(query)
 	if err != nil {
 		return err
@@ -46,7 +46,7 @@ func (s *sqlStore) Create(patient domain.Patient) error {
 }
 
 func (s *sqlStore) Update(patient domain.Patient) error {
-	query := "UPDATE patients SET FirstName = ?, LastName = ?, Address = ?, DNI = ?, ReleaseDate = ? WHERE id = ?;"
+	query := "UPDATE patients SET FirstName = ?, LastName = ?, Address = ?, DNI = ?, ReleaseDate = ? WHERE Id = ?;"
 	stmt, err := s.db.Prepare(query)
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func (s *sqlStore) Update(patient domain.Patient) error {
 }
 
 func (s *sqlStore) Delete(id int) error {
-	query := "DELETE FROM patients WHERE id = ?;"
+	query := "DELETE FROM patients WHERE Id = ?;"
 	stmt, err := s.db.Prepare(query)
 	if err != nil {
 		return err
@@ -82,7 +82,7 @@ func (s *sqlStore) Delete(id int) error {
 func (s *sqlStore) Exists(dni string) bool {
 	var exists bool
 	var id int
-	query := "SELECT id FROM patients WHERE DNI = ?;"
+	query := "SELECT Id FROM patients WHERE DNI = ?;"
 	row := s.db.QueryRow(query, dni)
 	err := row.Scan(&id)
 	if err != nil {
@@ -95,7 +95,7 @@ func (s *sqlStore) Exists(dni string) bool {
 }
 
 func (s *sqlStore) PatchAddress(id int, address string) error {
-	query := "UPDATE patients SET address = ? WHERE id = ?;"
+	query := "UPDATE patients SET Address = ? WHERE Id = ?;"
 	stmt, err := s.db.Prepare(query)
 	if err != nil {
 		return err

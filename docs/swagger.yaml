@@ -15,7 +15,12 @@ definitions:
     - License
     type: object
 info:
-  contact: {}
+  contact:
+    name: Melania Simes and Laura Urrego
+    url: https://github.com/laura-urrego-valois/desafio-final-go.git
+  description: This API Handle Dentists, Patients and Appointments
+  title: Proyecto Final Go
+  version: "1.0"
 paths:
   /dentists:
     get:
@@ -28,7 +33,9 @@ paths:
         "200":
           description: List of dentists
           schema:
-            type: slice
+            items:
+              $ref: '#/definitions/domain.Dentist'
+            type: array
         "500":
           description: Internal server error
           schema:

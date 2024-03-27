@@ -9,7 +9,10 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "Melania Simes and Laura Urrego",
+            "url": "https://github.com/laura-urrego-valois/desafio-final-go.git"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -32,7 +35,10 @@ const docTemplate = `{
                     "200": {
                         "description": "List of dentists",
                         "schema": {
-                            "type": "slice"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Dentist"
+                            }
                         }
                     },
                     "500": {
@@ -344,12 +350,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Proyecto Final Go",
+	Description:      "This API Handle Dentists, Patients and Appointments",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

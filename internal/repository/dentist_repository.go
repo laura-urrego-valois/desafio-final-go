@@ -29,16 +29,21 @@ func NewDentistRepository(storage store.DentistStoreInterface) DentistRepository
 // ----------------------------------
 
 func (r *dentistRepository) Create(dentist domain.Dentist) error {
-	if !r.storage.Exists(dentist.License) {
-		return errors.New("License already exists")
-	}
-	err := r.storage.Create(dentist)
+	exists, err := r.storage.Exists(dentist.License)
 	if err != nil {
 		return err
 	}
+	if exists {
+		return errors.New("License already exists")
+	}
+
+	err = r.storage.Create(dentist)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
-
 func (r *dentistRepository) GetByID(id int) (domain.Dentist, error) {
 	dentist, err := r.storage.Read(id)
 	if err != nil {
@@ -56,13 +61,19 @@ func (r *dentistRepository) GetAll() ([]domain.Dentist, error) {
 }
 
 func (r *dentistRepository) Update(dentist domain.Dentist) error {
-	if !r.storage.Exists(dentist.License) {
+	exists, err := r.storage.Exists(dentist.License)
+	if err != nil {
+		return err
+	}
+	if exists {
 		return errors.New("License already exists")
 	}
-	err := r.storage.Update(dentist)
+
+	err = r.storage.Update(dentist)
 	if err != nil {
-		return errors.New("Error updating dentist")
+		return err
 	}
+
 	return nil
 }
 

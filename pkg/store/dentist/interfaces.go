@@ -8,6 +8,6 @@ type DentistStoreInterface interface {
 	Update(product domain.Dentist) error
 	Delete(id int) error
 	GetAll() ([]domain.Dentist, error)
-	Exists(license string) bool
+	Exists(license string) (bool, error)
 	PatchLicense(id int, license string) error
 }

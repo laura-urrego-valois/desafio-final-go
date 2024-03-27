@@ -1,7 +1,13 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "This API Handle Dentists, Patients and Appointments",
+        "title": "Proyecto Final Go",
+        "contact": {
+            "name": "Melania Simes and Laura Urrego",
+            "url": "https://github.com/laura-urrego-valois/desafio-final-go.git"
+        },
+        "version": "1.0"
     },
     "paths": {
         "/dentists": {
@@ -21,7 +27,10 @@
                     "200": {
                         "description": "List of dentists",
                         "schema": {
-                            "type": "slice"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Dentist"
+                            }
                         }
                     },
                     "500": {
