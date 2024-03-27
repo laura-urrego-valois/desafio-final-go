@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"proyecto_final_go/internal/domain"
+	"strconv"
 )
 
 type sqlStore struct {
@@ -39,9 +40,12 @@ func (s *sqlStore) Create(dentist domain.Dentist) error {
 	if err != nil {
 		return err
 	}
-	_, err = res.RowsAffected()
+	rowsAffected, err := res.RowsAffected()
 	if err != nil {
 		return err
+	}
+	if rowsAffected != 1 {
+		return errors.New("expected 1 row to be affected, but got " + strconv.FormatInt(rowsAffected, 10))
 	}
 	return nil
 }

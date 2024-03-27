@@ -65,17 +65,11 @@ func (r *appointmentRepository) GetByID(id int) (domain.Appointment, error) {
 }
 
 func (r *appointmentRepository) GetByPatientDNI(patientDNI string) ([]domain.Appointment, error) {
-	allAppointments, err := r.storage.GetAll()
+	appointments, err := r.storage.ReadByPatientDNI(patientDNI)
 	if err != nil {
 		return nil, err
 	}
-	appointmentsByPatientDNI := make([]domain.Appointment, 0)
-	for _, appointment := range allAppointments {
-		if appointment.Patient.DNI == patientDNI {
-			appointmentsByPatientDNI = append(appointmentsByPatientDNI, appointment)
-		}
-	}
-	return appointmentsByPatientDNI, nil
+	return appointments, nil
 }
 
 func (r *appointmentRepository) GetAll() ([]domain.Appointment, error) {

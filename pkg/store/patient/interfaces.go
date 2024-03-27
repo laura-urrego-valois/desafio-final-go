@@ -10,6 +10,6 @@ type PatientStoreInterface interface {
 	Update(product domain.Patient) error
 	Delete(id int) error
 	GetAll() ([]domain.Patient, error)
-	Exists(dni string) bool
+	Exists(dni string) (bool, error)
 	PatchAddress(id int, address string) error
 }

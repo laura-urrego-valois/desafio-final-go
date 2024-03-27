@@ -1,0 +1,657 @@
+definitions:
+  domain.Appointment:
+    properties:
+      Date:
+        description: |-
+          @Description The release date of the patient (dd/MM/YYYY)
+          @Example "30/03/2024"
+        type: string
+      Description:
+        description: |-
+          @Description The description of the appointment
+          @Example "Routine checkup"
+        type: string
+      Hour:
+        description: |-
+          @Description The time of the appointment in 24-hour format
+          @Example "09:00"
+        type: string
+      Id:
+        description: |-
+          @Description The unique identifier of the appointment
+          @Example 1
+        type: integer
+      dentists_Id:
+        allOf:
+        - $ref: '#/definitions/domain.Dentist'
+        description: '@Description Information related to the patient'
+      patients_Id:
+        allOf:
+        - $ref: '#/definitions/domain.Patient'
+        description: '@Description Information related to the patient'
+    required:
+    - Date
+    - Description
+    - Hour
+    - dentists_Id
+    - patients_Id
+    type: object
+  domain.Dentist:
+    properties:
+      FirstName:
+        description: |-
+          @Description The first name of the dentist
+          @Example "Daniel"
+        type: string
+      Id:
+        description: |-
+          @Description The unique identifier of the dentist
+          @Example 1
+        type: integer
+      LastName:
+        description: |-
+          @Description The last name of the dentist
+          @Example "Rodríguez"
+        type: string
+      License:
+        description: |-
+          @Description The license number of the dentist
+          @Example "AXMER"
+        type: string
+    required:
+    - FirstName
+    - LastName
+    - License
+    type: object
+  domain.Patient:
+    properties:
+      Address:
+        description: |-
+          @Description The address of the patient
+          @Example "Av. 22 # 40"
+        type: string
+      DNI:
+        description: |-
+          @Description The DNI of the patient
+          @Example "538434"
+        type: string
+      FirstName:
+        description: |-
+          @Description The first name of the patient
+          @Example "Daniel"
+        type: string
+      Id:
+        description: |-
+          @Description The unique identifier of the patient
+          @Example 1
+        type: integer
+      LastName:
+        description: |-
+          @Description The last name of the patient
+          @Example "Rodríguez"
+        type: string
+      ReleaseDate:
+        description: |-
+          @Description The release date of the patient (dd/MM/YYYY)
+          @Example "30/03/2024"
+        type: string
+    required:
+    - Address
+    - DNI
+    - FirstName
+    - LastName
+    - ReleaseDate
+    type: object
+info:
+  contact:
+    name: Melania Simes and Laura Urrego
+    url: https://github.com/laura-urrego-valois/desafio-final-go.git
+  description: This API Handle Dentists, Patients and Appointments
+  title: Proyecto Final Go
+  version: "1.0"
+paths:
+  /appointments:
+    get:
+      description: This endpoint allows you to retrieve all appointments.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Appointments
+          schema:
+            items:
+              $ref: '#/definitions/domain.Appointment'
+            type: array
+        "500":
+          description: Failed to retrieve appointments
+      summary: Get all appointments
+      tags:
+      - Appointments
+    post:
+      description: This endpoint allows you to create a new appointment with the provided
+        data.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Appointment
+        in: body
+        name: dentist
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Appointment'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Appointment created successfully
+        "400":
+          description: Invalid appointment data or missing required fields
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "500":
+          description: Failed to create appointment
+      summary: Create a new appointment
+      tags:
+      - Appointments
+    put:
+      description: This endpoint allows you to update an appointment with the provided
+        data.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Updated appointment information
+        in: body
+        name: dentist
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Appointment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated appointment
+          schema:
+            $ref: '#/definitions/domain.Appointment'
+        "400":
+          description: Invalid appointment data or missing required fields
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "500":
+          description: Failed to update appointment
+      summary: Update an appointment
+      tags:
+      - Appointments
+  /appointments/{id}:
+    delete:
+      description: This endpoint allows you to delete an appointment by its ID.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Appointment deleted successfully
+        "400":
+          description: Invalid ID
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "500":
+          description: Failed to delete appointment
+      summary: Delete an appointment
+      tags:
+      - Appointments
+    get:
+      description: This endpoint allows you to retrieve an appointment by its ID.
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Appointment
+          schema:
+            $ref: '#/definitions/domain.Appointment'
+        "400":
+          description: Invalid ID
+        "404":
+          description: Appointment not found
+      summary: Get an appointment by ID
+      tags:
+      - Appointments
+    patch:
+      description: This endpoint allows you to update a appointment's description
+        with the provided data.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated description information
+        in: body
+        name: description
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Description updated successfully
+        "400":
+          description: Invalid request or missing required fields
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "404":
+          description: Appointment not found
+        "500":
+          description: Failed to update Description
+      summary: Update an appointment's description
+      tags:
+      - Appointments
+  /appointments/dnilicense:
+    post:
+      description: Create a new appointment in the system by patient DNI and dentist
+        license
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Patient DNI
+        in: query
+        name: patient_dni
+        required: true
+        type: string
+      - description: Dentist license
+        in: query
+        name: license
+        required: true
+        type: string
+      - description: Appointment date
+        in: query
+        name: date
+        required: true
+        type: string
+      - description: Appointment hour
+        in: query
+        name: hour
+        required: true
+        type: string
+      - description: Appointment description
+        in: query
+        name: description
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Appointment created successfully
+          schema:
+            $ref: '#/definitions/domain.Appointment'
+        "400":
+          description: Invalid parameters or missing required fields
+        "401":
+          description: Token not found or invalid token
+        "500":
+          description: Internal server error
+      summary: Create a new appointment by patient DNI and dentist license
+      tags:
+      - Appointments
+  /appointments/patient:
+    get:
+      description: This endpoint allows you to retrieve appointments for a patient
+        by their DNI.
+      parameters:
+      - description: Patient DNI
+        in: query
+        name: dni
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Appointments
+          schema:
+            items:
+              $ref: '#/definitions/domain.Appointment'
+            type: array
+        "400":
+          description: DNI parameter is required
+        "404":
+          description: No appointments found for this patient DNI
+      summary: Get appointments by patient DNI
+      tags:
+      - Appointments
+  /dentists:
+    get:
+      description: This endpoint allows you to retrieve all patients.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Patients
+          schema:
+            items:
+              $ref: '#/definitions/domain.Patient'
+            type: array
+        "500":
+          description: Failed to retrieve patients
+      summary: Get all patients
+      tags:
+      - Patients
+    post:
+      description: This endpoint allows you to create a new dentist with the provided
+        data.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Dentist
+        in: body
+        name: dentist
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Dentist'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Dentist created successfully
+        "400":
+          description: Invalid dentist data or missing required fields
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "500":
+          description: Failed to create dentist
+      summary: Create a new dentist
+      tags:
+      - Dentists
+    put:
+      description: This endpoint allows you to update a dentist with the provided
+        data.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Updated dentist information
+        in: body
+        name: dentist
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Dentist'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated dentist
+          schema:
+            $ref: '#/definitions/domain.Dentist'
+        "400":
+          description: Invalid dentist data or missing required fields
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "500":
+          description: Failed to update dentist
+      summary: Update a dentist
+      tags:
+      - Dentists
+  /dentists/{id}:
+    delete:
+      description: This endpoint allows you to delete a dentist by their ID.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Dentist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Dentist deleted successfully
+        "400":
+          description: Invalid ID
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "500":
+          description: Failed to delete dentist
+      summary: Delete a dentist
+      tags:
+      - Dentists
+    get:
+      description: This endpoint allows you to retrieve a dentist by their ID.
+      parameters:
+      - description: Dentist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Dentist
+          schema:
+            $ref: '#/definitions/domain.Dentist'
+        "400":
+          description: Invalid ID
+        "404":
+          description: Dentist not found
+      summary: Get a dentist by ID
+      tags:
+      - Dentists
+    patch:
+      description: This endpoint allows you to update a dentist's license with the
+        provided data.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Dentist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated license information
+        in: body
+        name: license
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: License updated successfully
+        "400":
+          description: Invalid request or missing required fields
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "404":
+          description: Dentist not found
+        "500":
+          description: Failed to update License
+      summary: Update a dentist's license
+      tags:
+      - Dentists
+  /patients:
+    post:
+      description: This endpoint allows you to create a new patient with the provided
+        data.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Patient
+        in: body
+        name: patient
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Patient'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Patient created successfully
+        "400":
+          description: Invalid patient data or missing required fields
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "500":
+          description: Failed to create patient
+      summary: Create a new patient
+      tags:
+      - Patients
+    put:
+      description: This endpoint allows you to update a patient with the provided
+        data.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Updated patient information
+        in: body
+        name: patient
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Patient'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated patient
+          schema:
+            $ref: '#/definitions/domain.Patient'
+        "400":
+          description: Invalid patient data or missing required fields
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "500":
+          description: Failed to update patient
+      summary: Update a patient
+      tags:
+      - Patients
+  /patients/{id}:
+    delete:
+      description: This endpoint allows you to delete a patient by their ID.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Patient deleted successfully
+        "400":
+          description: Invalid ID
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "500":
+          description: Failed to delete patient
+      summary: Delete a patient
+      tags:
+      - Patients
+    get:
+      description: This endpoint allows you to retrieve a patient by their ID.
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Patient
+          schema:
+            $ref: '#/definitions/domain.Patient'
+        "400":
+          description: Invalid ID
+        "404":
+          description: Patient not found
+      summary: Get a patient by ID
+      tags:
+      - Patients
+    patch:
+      description: This endpoint allows you to update a patient's address with the
+        provided data.
+      parameters:
+      - description: TOKEN
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated address information
+        in: body
+        name: address
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Address updated successfully
+        "400":
+          description: Invalid request or missing required fields
+        "401":
+          description: Unauthorized access due to missing or invalid token
+        "404":
+          description: Patient not found
+        "500":
+          description: Failed to update Address
+      summary: Update a patient's address
+      tags:
+      - Patients
+swagger: "2.0"

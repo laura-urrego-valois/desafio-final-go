@@ -2,6 +2,7 @@ package store
 
 import (
 	"database/sql"
+	"errors"
 	"proyecto_final_go/internal/domain"
 )
 
@@ -34,14 +35,21 @@ func (s *sqlStore) Create(patient domain.Patient) error {
 	if err != nil {
 		return err
 	}
+	defer stmt.Close()
+
 	res, err := stmt.Exec(patient.FirstName, patient.LastName, patient.Address, patient.DNI, patient.ReleaseDate)
 	if err != nil {
 		return err
 	}
-	_, err = res.RowsAffected()
+
+	rowsAffected, err := res.RowsAffected()
 	if err != nil {
 		return err
 	}
+	if rowsAffected == 0 {
+		return errors.New("no rows affected")
+	}
+
 	return nil
 }
 
@@ -79,19 +87,18 @@ func (s *sqlStore) Delete(id int) error {
 	return nil
 }
 
-func (s *sqlStore) Exists(dni string) bool {
-	var exists bool
+func (s *sqlStore) Exists(dni string) (bool, error) {
 	var id int
 	query := "SELECT Id FROM patients WHERE DNI = ?;"
 	row := s.db.QueryRow(query, dni)
 	err := row.Scan(&id)
 	if err != nil {
-		return false
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, nil
+		}
+		return false, err
 	}
-	if id > 0 {
-		exists = true
-	}
-	return exists
+	return id > 0, nil
 }
 
 func (s *sqlStore) PatchAddress(id int, address string) error {

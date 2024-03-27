@@ -261,19 +261,18 @@ func (s *sqlAppointmentStore) GetAll() ([]domain.Appointment, error) {
 	return appointments, nil
 }
 
-func (s *sqlAppointmentStore) Exists(id int) bool {
-	var exists bool
+func (s *sqlAppointmentStore) Exists(id int) (bool, error) {
 	var appointmentId int
 	query := "SELECT Id FROM appointments WHERE Id = ?;"
-	row := s.db.QueryRow(query, id)
+	row := s.db.QueryRow(query, appointmentId)
 	err := row.Scan(&appointmentId)
 	if err != nil {
-		return false
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, nil
+		}
+		return false, err
 	}
-	if appointmentId > 0 {
-		exists = true
-	}
-	return exists
+	return appointmentId > 0, nil
 }
 
 func (s *sqlAppointmentStore) PatchDescription(id int, description string) error {

@@ -1,0 +1,920 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This API Handle Dentists, Patients and Appointments",
+        "title": "Proyecto Final Go",
+        "contact": {
+            "name": "Melania Simes and Laura Urrego",
+            "url": "https://github.com/laura-urrego-valois/desafio-final-go.git"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/appointments": {
+            "get": {
+                "description": "This endpoint allows you to retrieve all appointments.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Get all appointments",
+                "responses": {
+                    "200": {
+                        "description": "Appointments",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Appointment"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve appointments"
+                    }
+                }
+            },
+            "put": {
+                "description": "This endpoint allows you to update an appointment with the provided data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Update an appointment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated appointment information",
+                        "name": "dentist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Appointment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated appointment",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Appointment"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid appointment data or missing required fields"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "500": {
+                        "description": "Failed to update appointment"
+                    }
+                }
+            },
+            "post": {
+                "description": "This endpoint allows you to create a new appointment with the provided data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Create a new appointment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Appointment",
+                        "name": "dentist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Appointment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Appointment created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid appointment data or missing required fields"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "500": {
+                        "description": "Failed to create appointment"
+                    }
+                }
+            }
+        },
+        "/appointments/dnilicense": {
+            "post": {
+                "description": "Create a new appointment in the system by patient DNI and dentist license",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Create a new appointment by patient DNI and dentist license",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Patient DNI",
+                        "name": "patient_dni",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Dentist license",
+                        "name": "license",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Appointment date",
+                        "name": "date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Appointment hour",
+                        "name": "hour",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Appointment description",
+                        "name": "description",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Appointment created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Appointment"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters or missing required fields"
+                    },
+                    "401": {
+                        "description": "Token not found or invalid token"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/appointments/patient": {
+            "get": {
+                "description": "This endpoint allows you to retrieve appointments for a patient by their DNI.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Get appointments by patient DNI",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Patient DNI",
+                        "name": "dni",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Appointments",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Appointment"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "DNI parameter is required"
+                    },
+                    "404": {
+                        "description": "No appointments found for this patient DNI"
+                    }
+                }
+            }
+        },
+        "/appointments/{id}": {
+            "get": {
+                "description": "This endpoint allows you to retrieve an appointment by its ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Get an appointment by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Appointment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Appointment",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Appointment"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID"
+                    },
+                    "404": {
+                        "description": "Appointment not found"
+                    }
+                }
+            },
+            "delete": {
+                "description": "This endpoint allows you to delete an appointment by its ID.",
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Delete an appointment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Appointment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Appointment deleted successfully"
+                    },
+                    "400": {
+                        "description": "Invalid ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "500": {
+                        "description": "Failed to delete appointment"
+                    }
+                }
+            },
+            "patch": {
+                "description": "This endpoint allows you to update a appointment's description with the provided data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Update an appointment's description",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Appointment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated description information",
+                        "name": "description",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Description updated successfully"
+                    },
+                    "400": {
+                        "description": "Invalid request or missing required fields"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "404": {
+                        "description": "Appointment not found"
+                    },
+                    "500": {
+                        "description": "Failed to update Description"
+                    }
+                }
+            }
+        },
+        "/dentists": {
+            "get": {
+                "description": "This endpoint allows you to retrieve all patients.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Get all patients",
+                "responses": {
+                    "200": {
+                        "description": "Patients",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Patient"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve patients"
+                    }
+                }
+            },
+            "put": {
+                "description": "This endpoint allows you to update a dentist with the provided data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dentists"
+                ],
+                "summary": "Update a dentist",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated dentist information",
+                        "name": "dentist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Dentist"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated dentist",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Dentist"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid dentist data or missing required fields"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "500": {
+                        "description": "Failed to update dentist"
+                    }
+                }
+            },
+            "post": {
+                "description": "This endpoint allows you to create a new dentist with the provided data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dentists"
+                ],
+                "summary": "Create a new dentist",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Dentist",
+                        "name": "dentist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Dentist"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Dentist created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid dentist data or missing required fields"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "500": {
+                        "description": "Failed to create dentist"
+                    }
+                }
+            }
+        },
+        "/dentists/{id}": {
+            "get": {
+                "description": "This endpoint allows you to retrieve a dentist by their ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dentists"
+                ],
+                "summary": "Get a dentist by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Dentist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dentist",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Dentist"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID"
+                    },
+                    "404": {
+                        "description": "Dentist not found"
+                    }
+                }
+            },
+            "delete": {
+                "description": "This endpoint allows you to delete a dentist by their ID.",
+                "tags": [
+                    "Dentists"
+                ],
+                "summary": "Delete a dentist",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Dentist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Dentist deleted successfully"
+                    },
+                    "400": {
+                        "description": "Invalid ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "500": {
+                        "description": "Failed to delete dentist"
+                    }
+                }
+            },
+            "patch": {
+                "description": "This endpoint allows you to update a dentist's license with the provided data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dentists"
+                ],
+                "summary": "Update a dentist's license",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Dentist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated license information",
+                        "name": "license",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "License updated successfully"
+                    },
+                    "400": {
+                        "description": "Invalid request or missing required fields"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "404": {
+                        "description": "Dentist not found"
+                    },
+                    "500": {
+                        "description": "Failed to update License"
+                    }
+                }
+            }
+        },
+        "/patients": {
+            "put": {
+                "description": "This endpoint allows you to update a patient with the provided data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Update a patient",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated patient information",
+                        "name": "patient",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Patient"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated patient",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Patient"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid patient data or missing required fields"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "500": {
+                        "description": "Failed to update patient"
+                    }
+                }
+            },
+            "post": {
+                "description": "This endpoint allows you to create a new patient with the provided data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Create a new patient",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Patient",
+                        "name": "patient",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Patient"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Patient created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid patient data or missing required fields"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "500": {
+                        "description": "Failed to create patient"
+                    }
+                }
+            }
+        },
+        "/patients/{id}": {
+            "get": {
+                "description": "This endpoint allows you to retrieve a patient by their ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Get a patient by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Patient ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Patient",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Patient"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID"
+                    },
+                    "404": {
+                        "description": "Patient not found"
+                    }
+                }
+            },
+            "delete": {
+                "description": "This endpoint allows you to delete a patient by their ID.",
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Delete a patient",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Patient ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Patient deleted successfully"
+                    },
+                    "400": {
+                        "description": "Invalid ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "500": {
+                        "description": "Failed to delete patient"
+                    }
+                }
+            },
+            "patch": {
+                "description": "This endpoint allows you to update a patient's address with the provided data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Update a patient's address",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TOKEN",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Patient ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated address information",
+                        "name": "address",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Address updated successfully"
+                    },
+                    "400": {
+                        "description": "Invalid request or missing required fields"
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to missing or invalid token"
+                    },
+                    "404": {
+                        "description": "Patient not found"
+                    },
+                    "500": {
+                        "description": "Failed to update Address"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Appointment": {
+            "type": "object",
+            "required": [
+                "Date",
+                "Description",
+                "Hour",
+                "dentists_Id",
+                "patients_Id"
+            ],
+            "properties": {
+                "Date": {
+                    "description": "@Description The release date of the patient (dd/MM/YYYY)\n@Example \"30/03/2024\"",
+                    "type": "string"
+                },
+                "Description": {
+                    "description": "@Description The description of the appointment\n@Example \"Routine checkup\"",
+                    "type": "string"
+                },
+                "Hour": {
+                    "description": "@Description The time of the appointment in 24-hour format\n@Example \"09:00\"",
+                    "type": "string"
+                },
+                "Id": {
+                    "description": "@Description The unique identifier of the appointment\n@Example 1",
+                    "type": "integer"
+                },
+                "dentists_Id": {
+                    "description": "@Description Information related to the patient",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/domain.Dentist"
+                        }
+                    ]
+                },
+                "patients_Id": {
+                    "description": "@Description Information related to the patient",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/domain.Patient"
+                        }
+                    ]
+                }
+            }
+        },
+        "domain.Dentist": {
+            "type": "object",
+            "required": [
+                "FirstName",
+                "LastName",
+                "License"
+            ],
+            "properties": {
+                "FirstName": {
+                    "description": "@Description The first name of the dentist\n@Example \"Daniel\"",
+                    "type": "string"
+                },
+                "Id": {
+                    "description": "@Description The unique identifier of the dentist\n@Example 1",
+                    "type": "integer"
+                },
+                "LastName": {
+                    "description": "@Description The last name of the dentist\n@Example \"Rodríguez\"",
+                    "type": "string"
+                },
+                "License": {
+                    "description": "@Description The license number of the dentist\n@Example \"AXMER\"",
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Patient": {
+            "type": "object",
+            "required": [
+                "Address",
+                "DNI",
+                "FirstName",
+                "LastName",
+                "ReleaseDate"
+            ],
+            "properties": {
+                "Address": {
+                    "description": "@Description The address of the patient\n@Example \"Av. 22 # 40\"",
+                    "type": "string"
+                },
+                "DNI": {
+                    "description": "@Description The DNI of the patient\n@Example \"538434\"",
+                    "type": "string"
+                },
+                "FirstName": {
+                    "description": "@Description The first name of the patient\n@Example \"Daniel\"",
+                    "type": "string"
+                },
+                "Id": {
+                    "description": "@Description The unique identifier of the patient\n@Example 1",
+                    "type": "integer"
+                },
+                "LastName": {
+                    "description": "@Description The last name of the patient\n@Example \"Rodríguez\"",
+                    "type": "string"
+                },
+                "ReleaseDate": {
+                    "description": "@Description The release date of the patient (dd/MM/YYYY)\n@Example \"30/03/2024\"",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

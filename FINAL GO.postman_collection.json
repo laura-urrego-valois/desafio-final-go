@@ -1,0 +1,441 @@
+{
+	"info": {
+		"_postman_id": "16c494b4-a8f3-4a4f-be93-df2ad52dbfe3",
+		"name": "FINAL GO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "28873724"
+	},
+	"item": [
+		{
+			"name": "Dentists",
+			"item": [
+				{
+					"name": "Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"FirstName\": \"Karina\",\r\n    \"LastName\": \"Mendez\",\r\n    \"License\": \"KJWRF\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/dentists"
+					},
+					"response": []
+				},
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/dentists"
+					},
+					"response": []
+				},
+				{
+					"name": "GetByID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/dentists/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Put",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"Id\": 6,\r\n        \"FirstName\": \"Pamela\",\r\n        \"LastName\": \"Palacios\",\r\n        \"License\": \"WQXRZ\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/dentists/6"
+					},
+					"response": []
+				},
+				{
+					"name": "PatchLicense",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": 2,\r\n    \"License\": \"APLEW\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/dentists/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/dentists/9"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Patients",
+			"item": [
+				{
+					"name": "Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"FirstName\": \"Andrés\",\r\n    \"LastName\": \"Mesa\",\r\n    \"Address\": \"Av Paraíso # 5 - 40\",\r\n    \"DNI\": \"339079\",\r\n    \"ReleaseDate\": \"28/12/2024\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/patients"
+					},
+					"response": []
+				},
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/patients"
+					},
+					"response": []
+				},
+				{
+					"name": "GetByID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/patients/4"
+					},
+					"response": []
+				},
+				{
+					"name": "Put",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": 4,\r\n    \"FirstName\": \"Isabella\",\r\n    \"LastName\": \"Pérez\",\r\n    \"Address\": \"Carrera 7 # 12\",\r\n    \"DNI\": \"495823\",\r\n    \"ReleaseDate\": \"03/09/2024\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/patients/4"
+					},
+					"response": []
+				},
+				{
+					"name": "PatchAddress",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \"Id\": 4,\r\n        \"Address\": \"Carrera 8 # 10\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/patients/4"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/patients/7"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Appointments",
+			"item": [
+				{
+					"name": "Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"patients_Id\": {\r\n        \"Id\": 2,\r\n        \"FirstName\": \"Valentina\",\r\n        \"LastName\": \"Gómez\",\r\n        \"Address\": \"Calle 15 # 58\",\r\n        \"DNI\": \"684729\",\r\n        \"ReleaseDate\": \"15/05/2024\"\r\n    },\r\n    \"dentists_Id\": {\r\n        \"Id\": 2,\r\n        \"FirstName\": \"Ana Malena\",\r\n        \"LastName\": \"Benavides\",\r\n        \"License\": \"APLEQ\"\r\n    },\r\n    \"Date\": \"2024-03-30\",\r\n    \"Hour\": \"14:30\",\r\n    \"Description\": \"Limpieza dental\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/appointments"
+					},
+					"response": []
+				},
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/appointments"
+					},
+					"response": []
+				},
+				{
+					"name": "GetByID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/appointments/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Put",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": 1,\r\n    \"patients_Id\": {\r\n        \"Id\": 1,\r\n        \"FirstName\": \"Teodoro\",\r\n        \"LastName\": \"Álvarez\",\r\n        \"Address\": \"Av. 22 # 40\",\r\n        \"DNI\": \"538434\",\r\n        \"ReleaseDate\": \"30/03/2024\"\r\n    },\r\n    \"dentists_Id\": {\r\n        \"Id\": 1,\r\n        \"FirstName\": \"Juan\",\r\n        \"LastName\": \"Pérez\",\r\n        \"License\": \"AXMER\"\r\n    },\r\n    \"Date\": \"29/03/2024\",\r\n    \"Hour\": \"10:00\",\r\n    \"Description\": \"Valoración\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/appointments/1"
+					},
+					"response": []
+				},
+				{
+					"name": "PatchDescription",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": 1,\r\n    \"Description\": \"Dental veneers\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/appointments/1/description"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:8080/appointments/4"
+					},
+					"response": []
+				},
+				{
+					"name": "GetByPatientDNI",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/appointments/patient?dni=538434",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"appointments",
+								"patient"
+							],
+							"query": [
+								{
+									"key": "dni",
+									"value": "538434"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostByDNI-License",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "TOKEN",
+								"value": "secret-token",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/appointments/dnilicense?patient_dni=639572&license=AXMER&date=30/03/2024&hour=15:00&description=dental whitening",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"appointments",
+								"dnilicense"
+							],
+							"query": [
+								{
+									"key": "patient_dni",
+									"value": "639572"
+								},
+								{
+									"key": "license",
+									"value": "AXMER"
+								},
+								{
+									"key": "date",
+									"value": "30/03/2024"
+								},
+								{
+									"key": "hour",
+									"value": "15:00"
+								},
+								{
+									"key": "description",
+									"value": "dental whitening"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

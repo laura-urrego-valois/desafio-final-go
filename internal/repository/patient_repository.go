@@ -28,13 +28,19 @@ func NewPatientRepository(storage store.PatientStoreInterface) PatientRepository
 //------------------------------------
 
 func (r *patientRepository) Create(p domain.Patient) error {
-	if !r.storage.Exists(p.DNI) {
-		return errors.New("DNI already exists")
-	}
-	err := r.storage.Create(p)
+	exists, err := r.storage.Exists(p.DNI)
 	if err != nil {
 		return err
 	}
+	if exists {
+		return errors.New("DNI already exists")
+	}
+
+	err = r.storage.Create(p)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -56,13 +62,19 @@ func (r *patientRepository) GetAll() ([]domain.Patient, error) {
 }
 
 func (r *patientRepository) Update(p domain.Patient) error {
-	if !r.storage.Exists(p.DNI) {
+	exists, err := r.storage.Exists(p.DNI)
+	if err != nil {
+		return err
+	}
+	if exists {
 		return errors.New("DNI already exists")
 	}
-	err := r.storage.Update(p)
+
+	err = r.storage.Update(p)
 	if err != nil {
-		return errors.New("Error updating patient")
+		return err
 	}
+
 	return nil
 }
 

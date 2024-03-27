@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"os"
 	"proyecto_final_go/cmd/handler"
+	_ "proyecto_final_go/internal/domain"
 	"proyecto_final_go/internal/repository"
 	"proyecto_final_go/internal/service"
 	"proyecto_final_go/pkg/middleware"
@@ -11,12 +12,13 @@ import (
 	storeDentist "proyecto_final_go/pkg/store/dentist"
 	storePatient "proyecto_final_go/pkg/store/patient"
 
+	docs "proyecto_final_go/cmd/docs"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/swag/example/basic/docs"
 )
 
 // @title Proyecto Final Go
@@ -91,8 +93,8 @@ func main() {
 		appointments.PUT(":id", middleware.Authentication(), handlerAppointments.Put())
 		appointments.PATCH(":id/description", middleware.Authentication(), handlerAppointments.PatchDescription())
 		appointments.DELETE(":id", middleware.Authentication(), handlerAppointments.Delete())
-		appointments.POST("/dni-license", middleware.Authentication(), handlerAppointments.PostByDNIAndLicese())
-		appointments.GET("/patient/:dni", handlerAppointments.GetByPatientDNI())
+		appointments.POST("/dnilicense", middleware.Authentication(), handlerAppointments.PostByDNIAndLicense())
+		appointments.GET("/patient", handlerAppointments.GetByPatientDNI())
 		appointments.GET("", handlerAppointments.GetAll())
 	}
 
