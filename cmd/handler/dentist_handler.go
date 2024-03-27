@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
 	"proyecto_final_go/internal/domain"
@@ -61,6 +62,7 @@ func (h *dentistHandler) Post() gin.HandlerFunc {
 		err := h.s.Create(dentist)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err)
+			fmt.Printf(err.Error())
 			return
 		}
 
@@ -104,7 +106,7 @@ func (h *dentistHandler) GetByID() gin.HandlerFunc {
 // @Tags         dentists
 // @Accept       json
 // @Produce      json
-// @Success      200 {slice} domain.Dentist "List of dentists"
+// @Success      200 {array} domain.Dentist "List of dentists"
 // @Failure      500 {string} string "Internal server error"
 // @Router       /dentists [get]
 func (h *dentistHandler) GetAll() gin.HandlerFunc {

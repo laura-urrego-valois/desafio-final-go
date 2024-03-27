@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"os"
 	"proyecto_final_go/cmd/handler"
 	"proyecto_final_go/internal/repository"
@@ -20,19 +19,24 @@ import (
 	"github.com/swaggo/swag/example/basic/docs"
 )
 
+// @title Proyecto Final Go
+// @version 1.0
+// @description This API Handle Dentists, Patients and Appointments
+// @contact.name Melania Simes and Laura Urrego
+// @contact.url https://github.com/laura-urrego-valois/desafio-final-go.git
 func main() {
 
 	if err := godotenv.Load(".env"); err != nil {
 		panic("Error loading .env file: " + err.Error())
 	}
-	db, err := sql.Open("mysql", "root:secret@tcp(localhost:33060)/my_db")
+	db, err := sql.Open("mysql", "root:0714018@tcp(localhost:3306)/turnos-odontologia")
 	if err != nil {
 		panic(err.Error())
 	}
 
 	err = db.Ping()
 	if err != nil {
-		fmt.Printf("Error")
+		panic(err.Error())
 	}
 
 	storageDentists := storeDentist.NewSqlStore(db)
